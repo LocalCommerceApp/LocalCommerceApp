@@ -30,15 +30,18 @@ if not MONGO_URI:
 else:
     print(f"📡 Attempting to connect to MongoDB...")
 
+client = None
+db = None
+
 try:
     client = MongoClient(MONGO_URI)
     # The ismaster command is cheap and does not require auth.
     client.admin.command('ismaster')
     print("✅ MongoDB Connected Successfully")
+    db = client["local_commerce"]
 except Exception as e:
     print(f"❌ MongoDB Connection Failed: {e}")
-
-db = client["local_commerce"]
+    print("⚠️  Running in offline mode - database operations will fail")
 
 products_col = db["products"]
 carts_col = db["carts"]
@@ -318,7 +321,7 @@ if __name__ == "__main__":
     local_ip = get_local_ip()
     print("\n" + "="*50)
     print(f"🚀 SERVER STARTING...")
-    print(f"🏠 Local: http://127.0.0.1:5000")
-    print(f"📌 ON PHYSICAL PHONE, USE THIS IP: http://{local_ip}:5000")
+    print(f"🏠 Local: http://127.0.0.1:5001")
+    print(f"📌 ON PHYSICAL PHONE, USE THIS IP: http://{local_ip}:5001")
     print("="*50 + "\n")
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    app.run(debug=True, host="0.0.0.0", port=5001)

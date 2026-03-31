@@ -156,16 +156,24 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
                 children: [
-                  const SizedBox(height: 40),
-                  _buildBranding(),
-                  const SizedBox(height: 30),
-                  _buildLoginCard(context),
                   const SizedBox(height: 20),
+                  _buildBranding(),
+                  const SizedBox(height: 40),
+                  _buildLoginCard(context),
+                  const SizedBox(height: 24),
                   TextButton.icon(
                     onPressed: _isLoading ? null : _checkServer,
-                    icon: const Icon(Icons.lan_outlined),
-                    label: const Text("Troubleshoot Connection"),
+                    icon: Icon(Icons.lan_outlined, color: Colors.indigo.shade600, size: 20),
+                    label: Text(
+                      "Troubleshoot Connection",
+                      style: TextStyle(
+                        color: Colors.indigo.shade600,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
                   ),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),
@@ -194,16 +202,49 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildBranding() {
-    return const Column(
+    return Column(
       children: [
-        Text(
-          "Local Commerce",
-          style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
+        Container(
+          width: 70,
+          height: 70,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.15),
+                blurRadius: 15,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Center(
+            child: Icon(
+              Icons.storefront_outlined,
+              size: 38,
+              color: Colors.indigo.shade700,
+            ),
+          ),
         ),
-        SizedBox(height: 8),
-        Text(
+        const SizedBox(height: 18),
+        const Text(
+          "Local Commerce",
+          style: TextStyle(
+            fontSize: 36,
+            fontWeight: FontWeight.w900,
+            color: Colors.white,
+            letterSpacing: -0.5,
+          ),
+        ),
+        const SizedBox(height: 10),
+        const Text(
           "Connecting you to your neighborhood",
-          style: TextStyle(color: Colors.white70, fontSize: 16),
+          style: TextStyle(
+            color: Colors.white70,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0.2,
+          ),
         ),
       ],
     );
@@ -211,32 +252,40 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildLoginCard(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            color: Colors.black.withOpacity(0.12),
+            blurRadius: 30,
+            offset: const Offset(0, 15),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Login to your account", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 20),
+          const Text(
+            "Login to your account",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Colors.black87),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            "Select your role and enter credentials",
+            style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+          ),
+          const SizedBox(height: 24),
           _buildRoleDropdown(),
-          const SizedBox(height: 20),
+          const SizedBox(height: 22),
           _buildTextField(
             label: "Email Address",
             icon: Icons.email_outlined,
             hint: "example@mail.com",
             controller: _emailController,
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 22),
           _buildTextField(
             label: "Password",
             icon: Icons.lock_outline,
@@ -244,27 +293,63 @@ class _LoginScreenState extends State<LoginScreen> {
             isPassword: true,
             controller: _passwordController,
           ),
-          const SizedBox(height: 30),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 58),
-              backgroundColor: Colors.indigo.shade700,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          const SizedBox(height: 32),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.indigo.shade700, Colors.indigo.shade500],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.indigo.shade700.withOpacity(0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 6),
+                ),
+              ],
             ),
-            onPressed: _isLoading ? null : _handleLogin,
-            child: _isLoading
-                ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                : Text("Login as $selectedRole", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 60),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              ),
+              onPressed: _isLoading ? null : _handleLogin,
+              child: _isLoading
+                  ? const SizedBox(height: 24, width: 24, child: CircularProgressIndicator(strokeWidth: 2.5, color: Colors.white))
+                  : Text(
+                      "Login as $selectedRole",
+                      style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: Colors.white, letterSpacing: 0.3),
+                    ),
+            ),
           ),
-          const SizedBox(height: 14),
-          OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 54),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          const SizedBox(height: 18),
+          Center(
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 4,
+              children: [
+                Text(
+                  "Don't have an account? ",
+                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterScreen())),
+                  child: Text(
+                    "Register here",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.indigo.shade700,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterScreen())),
-            child: const Text("Don't have an account? Register"),
           ),
         ],
       ),
@@ -273,15 +358,40 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildRoleDropdown() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.grey[300]!, width: 1.5),
+      ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: selectedRole,
           isExpanded: true,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+          icon: Icon(Icons.expand_more_outlined, color: Colors.indigo.shade600),
           onChanged: (value) => setState(() => selectedRole = value!),
           items: ['Customer', 'Shopkeeper', 'Distributor']
-              .map((role) => DropdownMenuItem(value: role, child: Text(role)))
+              .map((role) => DropdownMenuItem(
+                    value: role,
+                    child: Row(
+                      children: [
+                        Icon(
+                          role == 'Customer'
+                              ? Icons.shopping_bag_outlined
+                              : role == 'Shopkeeper'
+                                  ? Icons.store_outlined
+                                  : Icons.local_shipping_outlined,
+                          color: Colors.indigo.shade600,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          role,
+                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+                  ))
               .toList(),
         ),
       ),
@@ -298,23 +408,52 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600)),
-        const SizedBox(height: 8),
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.grey[800],
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+            letterSpacing: 0.3,
+          ),
+        ),
+        const SizedBox(height: 10),
         TextField(
           controller: controller,
           obscureText: isPassword ? _obscureText : false,
           decoration: InputDecoration(
             hintText: hint,
-            prefixIcon: Icon(icon, color: Colors.indigo),
+            hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
+            prefixIcon: Icon(icon, color: Colors.indigo.shade600, size: 22),
             suffixIcon: isPassword
                 ? IconButton(
-                    icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility),
+                    icon: Icon(
+                      _obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                      color: Colors.indigo.shade600,
+                      size: 22,
+                    ),
                     onPressed: () => setState(() => _obscureText = !_obscureText),
                   )
                 : null,
             filled: true,
             fillColor: Colors.grey[50],
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide: BorderSide(color: Colors.grey[300]!, width: 1.5),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide: BorderSide(color: Colors.grey[300]!, width: 1.5),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide: BorderSide(color: Colors.indigo.shade600, width: 2.5),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide: BorderSide(color: Colors.red[400]!, width: 1.5),
+            ),
           ),
         ),
       ],

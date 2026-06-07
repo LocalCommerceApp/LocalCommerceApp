@@ -16,22 +16,29 @@ export class CacheService implements OnModuleInit, OnModuleDestroy {
     try {
       const redisUrl = this.configService.get<string>('REDIS_URL');
 
+      console.log('REDIS_URL:', redisUrl);
+
       if (redisUrl) {
-        // Production (Render + Upstash)
-        this.redisClient = new Redis(redisUrl, {
+        console.log('🔄 Connecting to Redis using REDIS_URL...');
+
+        // Parse URL manually
+        const parsedUrl = new URL(redisUrl);
+
+        this.redisClient = new Redis({
+          host: parsedUrl.hostname,
+          port: Number(parsedUrl.port),
+          username: decodeURIComponent(parsedUrl.username),
+          password: decodeURIComponent(parsedUrl.password),
           maxRetriesPerRequest: 1,
         });
-
-        console.log('🔄 Connecting to Redis using REDIS_URL...');
       } else {
-        // Local Development
+        console.log('🔄 Connecting to local Redis...');
+
         this.redisClient = new Redis({
           host: this.configService.get<string>('REDIS_HOST', 'localhost'),
           port: this.configService.get<number>('REDIS_PORT', 6379),
           maxRetriesPerRequest: 1,
         });
-
-        console.log('🔄 Connecting to local Redis...');
       }
 
       this.redisClient.on('connect', () => {
@@ -110,7 +117,7 @@ export class CacheService implements OnModuleInit, OnModuleDestroy {
     try {
       await this.redisClient.del(key);
     } catch {
-      // Ignore
+      // Ignore cache errors
     }
   }
 
@@ -126,7 +133,7 @@ export class CacheService implements OnModuleInit, OnModuleDestroy {
         await this.redisClient.del(...keys);
       }
     } catch {
-      // Ignore
+      // Ignore cache errors
     }
   }
 }

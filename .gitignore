@@ -91,10 +91,19 @@ project/
 server/node_modules/
 server/dist/
 .env
+*.env
+*.env.local
+*.env.production
+*.env.staging
 
-server/node_modules/
-server/dist/
-.env
+# =========================
+# Scratch / Dev-only Scripts
+# (may contain hardcoded credentials)
+# =========================
+
+server/scratch/
+server/fix_shop.js
+server/seed.ts
 
 # Documentation
 PROJECT_PLAN.md

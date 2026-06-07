@@ -136,6 +136,30 @@ class _LoginScreenState extends State<LoginScreen> {
                               ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                               : Text("Sign In as $selectedRole"),
                         ),
+                        
+                        const SizedBox(height: AppSpacing.lg),
+                        const Divider(),
+                        const SizedBox(height: AppSpacing.xs),
+                        const Text(
+                          "DEV QUICK LOGIN",
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.textSecondary,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.sm),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _buildDevLoginBtn("Customer", "cust@gmail.com", "123456", "Customer", authController),
+                            const SizedBox(width: AppSpacing.xs),
+                            _buildDevLoginBtn("Shopkeeper", "shop@gmail.com", "123456", "Shopkeeper", authController),
+                            const SizedBox(width: AppSpacing.xs),
+                            _buildDevLoginBtn("Distributor", "dist@gmail.com", "123456", "Distributor", authController),
+                          ],
+                        ),
                       ],
                     ),
                   ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.1),
@@ -219,6 +243,28 @@ class _LoginScreenState extends State<LoginScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildDevLoginBtn(String label, String email, String password, String role, AuthController authController) {
+    return Expanded(
+      child: OutlinedButton(
+        onPressed: () {
+          setState(() {
+            selectedRole = role;
+            _emailController.text = email;
+            _passwordController.text = password;
+          });
+          _handleLogin(authController);
+        },
+        style: OutlinedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          minimumSize: Size.zero,
+          side: const BorderSide(color: AppColors.primaryLight),
+          textStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+        ),
+        child: Text(label),
       ),
     );
   }

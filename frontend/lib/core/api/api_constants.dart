@@ -11,15 +11,15 @@ import 'package:flutter/foundation.dart';
 /// 3. BACKEND: Ensure you run using 'python app.py' NOT 'flask run'.
 
 String get apiBaseUrl {
-  if (kIsWeb) return 'http://localhost:5014/api/v1';
+  if (kIsWeb) return 'http://localhost:5001/api/v1';
 
   // --- EDIT THIS LINE ---
   // Change to your PC IP if using a real phone (e.g., '192.168.1.5')
   // We remove 'const' to ensure Flutter doesn't cache an old IP.
-  String hostIp = '192.168.0.104';
+  String hostIp = '10.0.2.2';
   // ----------------------
 
-  final url = 'http://$hostIp:5014/api/v1'; // Force refresh port
+  final url = 'http://$hostIp:5001/api/v1'; // Force refresh port
   
   if (kDebugMode) {
     print('📡 Attempting to connect to: $url');

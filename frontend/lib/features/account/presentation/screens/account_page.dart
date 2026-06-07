@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
-import 'package:testapp/core/design_system.dart';
-import 'package:testapp/features/auth/data/user_model.dart';
-import 'package:testapp/features/auth/presentation/auth_controller.dart';
-import 'package:testapp/features/orders/presentation/screens/orders_page.dart';
-import 'package:testapp/features/auth/presentation/screens/welcome_screen.dart';
+import '../../../../core/design_system.dart';
+import '../../../auth/data/user_model.dart';
+import '../../../auth/presentation/auth_controller.dart';
+import '../../../orders/presentation/screens/orders_page.dart';
+import '../../../auth/presentation/screens/welcome_screen.dart';
 import '../controllers/account_controller.dart';
 
 class AccountPage extends StatefulWidget {

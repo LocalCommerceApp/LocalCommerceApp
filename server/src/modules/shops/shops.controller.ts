@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, UseGuards, Req, NotFoundException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { ShopsService } from './shops.service';
 import { CreateShopDto } from './dto/create-shop.dto';
@@ -10,6 +10,17 @@ import { Roles } from '../auth/decorators/roles.decorator';
 @Controller('shops')
 export class ShopsController {
   constructor(private readonly shopsService: ShopsService) {}
+
+  @Get('my')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: "Get current user's shop" })
+  async getMyShop(@Req() req: any) {
+    const ownerId = req.user._id;
+    const shop = await this.shopsService.findByOwner(ownerId);
+    if (!shop) throw new NotFoundException('Shop not found');
+    return shop;
+  }
 
   @Get()
   @ApiOperation({ summary: 'Get all shops with optional filters' })

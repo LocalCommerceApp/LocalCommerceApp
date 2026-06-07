@@ -34,8 +34,8 @@ export class ProductsController {
   @Post()
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('Shopkeeper', 'Admin')
-  @ApiOperation({ summary: 'Create a new product (Shopkeepers only)' })
+  @Roles('Shopkeeper', 'Distributor', 'Admin')
+  @ApiOperation({ summary: 'Create a new product (Shopkeepers/Distributors only)' })
   create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }
@@ -43,8 +43,8 @@ export class ProductsController {
   @Put(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('Shopkeeper', 'Admin')
-  @ApiOperation({ summary: 'Update a product (Shopkeepers only)' })
+  @Roles('Shopkeeper', 'Distributor', 'Admin')
+  @ApiOperation({ summary: 'Update a product (Shopkeepers/Distributors only)' })
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productsService.update(id, updateProductDto);
   }

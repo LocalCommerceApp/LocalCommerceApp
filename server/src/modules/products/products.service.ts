@@ -21,11 +21,11 @@ export class ProductsService {
     const filter: any = { isAvailable: true };
     if (category) filter.category = category;
     if (shopId) {
+      const shopIds: any[] = [shopId];
       try {
-        filter.shop = new Types.ObjectId(shopId);
-      } catch (e) {
-        filter.shop = shopId;
-      }
+        shopIds.push(new Types.ObjectId(shopId));
+      } catch (e) {}
+      filter.shop = { $in: shopIds };
     }
     if (search) {
       filter.$or = [
@@ -68,14 +68,24 @@ export class ProductsService {
   }
 
   async create(createProductDto: CreateProductDto) {
-    const product = new this.productModel(createProductDto);
+    const productData = { ...createProductDto };
+    try {
+      productData.shop = new Types.ObjectId(createProductDto.shop) as any;
+    } catch (e) {}
+    const product = new this.productModel(productData);
     const saved = await product.save();
     await this.cacheService.clearPattern('products:*'); // Invalidate list cache
     return saved;
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
-    const updated = await this.productModel.findByIdAndUpdate(id, updateProductDto, { new: true });
+    const updateData: any = { ...updateProductDto };
+    if (updateData.shop) {
+      try {
+        updateData.shop = new Types.ObjectId(updateData.shop);
+      } catch (e) {}
+    }
+    const updated = await this.productModel.findByIdAndUpdate(id, updateData, { new: true });
     if (!updated) throw new NotFoundException('Product not found');
     
     await this.cacheService.delete(`product:${id}`);

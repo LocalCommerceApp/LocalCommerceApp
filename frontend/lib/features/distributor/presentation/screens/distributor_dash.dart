@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/design_system.dart';
 import 'orders_page.dart';
 import 'inventory_page.dart';
 import 'sales_report_page.dart';
@@ -9,7 +10,7 @@ class DistributorDash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: AppColors.background,
       body: CustomScrollView(
         slivers: [
           _buildAgencyHeader(),
@@ -19,21 +20,21 @@ class DistributorDash extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Business Overview", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text("Business Overview", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                   const SizedBox(height: 15),
                   
                   Row(
                     children: [
-                      _buildSummaryCard(context, "Total Items", "150+", Icons.inventory, Colors.blue),
+                      _buildSummaryCard(context, "Total Items", "150+", Icons.inventory, AppColors.skyBlue),
                       const SizedBox(width: 12),
-                      _buildSummaryCard(context, "Order Value", "₹45k", Icons.currency_rupee, Colors.green),
+                      _buildSummaryCard(context, "Order Value", "₹45k", Icons.currency_rupee, AppColors.freshGreen),
                     ],
                   ),
                   const SizedBox(height: 12),
-                  _buildSummaryCard(context, "Monthly Sales", "₹1.2L", Icons.bar_chart, Colors.purple, isFullWidth: true),
+                  _buildSummaryCard(context, "Monthly Sales", "₹1.2L", Icons.bar_chart, AppColors.accent, isFullWidth: true),
                   
                   const SizedBox(height: 30),
-                  const Text("Core Actions", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text("Core Actions", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                   const SizedBox(height: 15),
                   
                   _buildActionTile(context, "Incoming Orders", Icons.assignment_late_outlined, "Manage shopkeeper requests"),
@@ -52,12 +53,22 @@ class DistributorDash extends StatelessWidget {
     return SliverAppBar(
       expandedHeight: 200,
       pinned: true,
-      backgroundColor: Colors.indigo[900],
+      backgroundColor: AppColors.primary,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(AppRadius.xxl),
+          bottomRight: Radius.circular(AppRadius.xxl),
+        ),
+      ),
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           padding: const EdgeInsets.only(top: 80, left: 25, right: 25),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [Colors.indigo.shade900, Colors.indigo.shade700]),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(colors: [AppColors.primary, AppColors.secondary]),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(AppRadius.xxl),
+              bottomRight: Radius.circular(AppRadius.xxl),
+            ),
           ),
           child: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,8 +91,8 @@ class DistributorDash extends StatelessWidget {
       child: Column(children: [
         Icon(icon, color: color),
         const SizedBox(height: 8),
-        Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-        Text(title, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+        Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+        Text(title, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
       ]),
     );
 
@@ -97,10 +108,10 @@ class DistributorDash extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: ListTile(
-        leading: Icon(icon, color: Colors.indigo),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(sub, style: const TextStyle(fontSize: 12)),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+        leading: Icon(icon, color: AppColors.primary),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+        subtitle: Text(sub, style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+        trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textMuted),
         onTap: () {
           if (title == "Incoming Orders") {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const DistributorOrdersPage()));

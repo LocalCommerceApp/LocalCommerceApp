@@ -396,9 +396,9 @@ function renderAnalytics() {
   const verified = shopsData.filter(s => s.verificationStatus === 'Verified').length;
   const rejected = shopsData.filter(s => s.verificationStatus === 'Rejected').length;
 
-  const verifiedPct = Math.round((verified / total) * 100) || 0;
-  const pendingPct = Math.round((pending / total) * 100) || 0;
-  const rejectedPct = total > 0 ? Math.max(0, 100 - verifiedPct - pendingPct) : 0;
+  const verifiedPct = total > 0 ? Math.round((verified / total) * 100) : 0;
+  const pendingPct  = total > 0 ? Math.round((pending  / total) * 100) : 0;
+  const rejectedPct = total > 0 ? Math.round((rejected / total) * 100) : 0;
 
   // Update status segments
   const verifiedSeg = statusDist.querySelector('.segment.verified');

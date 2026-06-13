@@ -12,7 +12,7 @@ A premium, glassmorphic Single Page Application for administrators to review, ap
 ## How to Run
 
 ### Option 1: Direct Browser Launch (Easiest)
-Simply double-click the [index.html](file:///c:/Users/sayan/StudioProjects/LocalCommerceApp/admin/index.html) file to open it in your web browser. 
+Simply double-click the [index.html](file://$PATH_TO_PROJECT_FOLDER$/admin/index.html) file to open it in your web browser. 
 
 * **Local Backend Mode**: If you are running the backend locally (`npm run dev` on `http://localhost:5001`), the portal will automatically connect to it.
 * **Cloud Backend Mode**: If accessed outside localhost, it will automatically route API requests to your live Render instance (`https://localcommerceapp-1.onrender.com`).

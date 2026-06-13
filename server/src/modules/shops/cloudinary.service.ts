@@ -20,6 +20,11 @@ export class CloudinaryService {
   }
 
   async uploadFile(file: Express.Multer.File): Promise<string> {
+    console.log('Active Cloudinary Config:', {
+      cloud_name: cloudinary.config().cloud_name,
+      api_key: cloudinary.config().api_key,
+      has_secret: !!cloudinary.config().api_secret,
+    });
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {

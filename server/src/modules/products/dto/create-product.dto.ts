@@ -44,4 +44,9 @@ export class CreateProductDto {
   @IsNotEmpty()
   @IsString()
   shop: string;
+
+  @ApiProperty({ example: true, required: false })
+  @IsOptional()
+  @IsBoolean()
+  isAvailable?: boolean;
 }

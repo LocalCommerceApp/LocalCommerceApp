@@ -93,6 +93,9 @@ export class ShopsController {
   }
 
   @Get('admin/fix-status')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Admin')
   @ApiOperation({ summary: 'Fix status of all shops in database' })
   async fixStatus() {
     return this.shopsService.fixStatus();

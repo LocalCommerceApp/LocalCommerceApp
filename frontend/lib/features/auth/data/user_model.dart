@@ -1,20 +1,15 @@
-class UserModel {
-  final String id;
-  final String email;
-  final String role;
-  final String name;
-  final String businessName;
-  final String phone;
-  final String? accessToken;
+import '../domain/entities/user_entity.dart';
 
+class UserModel extends UserEntity {
   UserModel({
-    required this.id,
-    required this.email,
-    required this.role,
-    this.name = '',
-    this.businessName = '',
-    this.phone = '',
-    this.accessToken,
+    required super.id,
+    required super.email,
+    required super.role,
+    super.name = '',
+    super.businessName = '',
+    super.phone = '',
+    super.accessToken,
+    super.refreshToken,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -37,6 +32,7 @@ class UserModel {
       businessName: (data['businessName'] ?? '').toString(),
       phone: (data['phone'] ?? '').toString(),
       accessToken: safeJson['access_token']?.toString() ?? data['accessToken']?.toString(),
+      refreshToken: safeJson['refresh_token']?.toString() ?? data['refreshToken']?.toString(),
     );
   }
 
@@ -48,5 +44,6 @@ class UserModel {
     'businessName': businessName,
     'phone': phone,
     'accessToken': accessToken,
+    'refreshToken': refreshToken,
   };
 }

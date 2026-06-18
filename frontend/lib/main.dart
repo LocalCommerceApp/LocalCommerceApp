@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/app_theme.dart';
 import 'core/network/api_client.dart';
-import 'features/auth/domain/auth_repository.dart';
+import 'features/auth/domain/repositories/i_auth_repository.dart';
+import 'features/auth/domain/usecases/login_usecase.dart';
+import 'features/auth/domain/usecases/register_usecase.dart';
+import 'features/auth/domain/usecases/get_cached_user_usecase.dart';
+import 'features/auth/data/datasources/auth_remote_data_source.dart';
+import 'features/auth/data/datasources/auth_local_data_source.dart';
+import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/presentation/auth_controller.dart';
 import 'features/shop/domain/shop_repository.dart';
 import 'features/orders/domain/order_repository.dart';
@@ -25,8 +31,26 @@ void main() async {
     MultiProvider(
       providers: [
         Provider(create: (_) => ApiClient()),
-        ProxyProvider<ApiClient, AuthRepository>(
-          update: (_, api, __) => AuthRepository(api),
+        ProxyProvider<ApiClient, AuthRemoteDataSource>(
+          update: (_, api, __) => AuthRemoteDataSourceImpl(api),
+        ),
+        Provider<AuthLocalDataSource>(
+          create: (_) => AuthLocalDataSourceImpl(),
+        ),
+        ProxyProvider2<AuthRemoteDataSource, AuthLocalDataSource, IAuthRepository>(
+          update: (_, remote, local, __) => AuthRepositoryImpl(
+            remoteDataSource: remote,
+            localDataSource: local,
+          ),
+        ),
+        ProxyProvider<IAuthRepository, LoginUseCase>(
+          update: (_, repo, __) => LoginUseCase(repo),
+        ),
+        ProxyProvider<IAuthRepository, RegisterUseCase>(
+          update: (_, repo, __) => RegisterUseCase(repo),
+        ),
+        ProxyProvider<IAuthRepository, GetCachedUserUseCase>(
+          update: (_, repo, __) => GetCachedUserUseCase(repo),
         ),
         ProxyProvider<ApiClient, ShopRepository>(
           update: (_, api, __) => ShopRepository(api),
@@ -38,7 +62,11 @@ void main() async {
           update: (_, api, __) => CartRepository(api),
         ),
         ChangeNotifierProvider(
-          create: (context) => AuthController(context.read<AuthRepository>()),
+          create: (context) => AuthController(
+            loginUseCase: context.read<LoginUseCase>(),
+            registerUseCase: context.read<RegisterUseCase>(),
+            getCachedUserUseCase: context.read<GetCachedUserUseCase>(),
+          ),
         ),
         ChangeNotifierProvider(
           create: (context) => ShopController(context.read<ShopRepository>()),
@@ -63,7 +91,7 @@ class LocalCommerceApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authRepo = context.read<AuthRepository>();
+    final authRepo = context.read<IAuthRepository>();
     final user = authRepo.getCachedUser();
 
     Widget home;

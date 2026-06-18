@@ -16,8 +16,8 @@ export class RegisterDto {
   @MinLength(6)
   password: string;
 
-  @ApiProperty({ enum: ['Customer', 'Shopkeeper', 'Distributor', 'Admin'], default: 'Customer' })
-  @IsEnum(['Customer', 'Shopkeeper', 'Distributor', 'Admin'])
+  @ApiProperty({ enum: ['Customer', 'Shopkeeper', 'Distributor'], default: 'Customer' })
+  @IsEnum(['Customer', 'Shopkeeper', 'Distributor'])
   role: string;
 
   @ApiProperty({ example: 'My Awesome Shop', required: false })

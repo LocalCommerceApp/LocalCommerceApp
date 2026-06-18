@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -18,6 +18,10 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     const { email, password, role, name, businessName } = registerDto;
+    
+    if (role === 'Admin') {
+      throw new BadRequestException('Registration of Admin accounts is not permitted');
+    }
     
     const existingUser = await this.userModel.findOne({ email });
     if (existingUser) {
@@ -80,8 +84,50 @@ export class AuthService {
     return this.generateToken(user);
   }
 
-  private generateToken(user: UserDocument) {
-    const payload = { sub: user._id, email: user.email, role: user.role };
+  async refresh(token: string) {
+    try {
+      const payload = this.jwtService.verify(token);
+      if (payload.tokenType !== 'refresh') {
+        throw new UnauthorizedException('Invalid token type');
+      }
+
+      const user = await this.userModel.findById(payload.sub).select('+refreshTokenHash');
+      if (!user || !user.isActive || !user.refreshTokenHash) {
+        throw new UnauthorizedException('Session expired or user inactive');
+      }
+
+      const isMatch = await bcrypt.compare(token, user.refreshTokenHash);
+      if (!isMatch) {
+        throw new UnauthorizedException('Invalid session');
+      }
+
+      return this.generateToken(user);
+    } catch (e) {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+  }
+
+  async logout(userId: string) {
+    const user = await this.userModel.findById(userId);
+    if (user) {
+      user.refreshTokenHash = null as any;
+      await user.save();
+    }
+    return { success: true };
+  }
+
+  private async generateToken(user: UserDocument) {
+    const payload = { sub: user._id, email: user.email, role: user.role, tokenType: 'access' };
+    const refreshPayload = { sub: user._id, tokenType: 'refresh' };
+
+    const accessToken = this.jwtService.sign(payload);
+    const refreshToken = this.jwtService.sign(refreshPayload, {
+      expiresIn: '7d',
+    });
+
+    user.refreshTokenHash = await bcrypt.hash(refreshToken, 10);
+    await user.save();
+
     return {
       user: {
         id: user._id,
@@ -90,7 +136,8 @@ export class AuthService {
         role: user.role,
         businessName: user.businessName,
       },
-      access_token: this.jwtService.sign(payload),
+      access_token: accessToken,
+      refresh_token: refreshToken,
     };
   }
 }

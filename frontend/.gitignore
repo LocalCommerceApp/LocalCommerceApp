@@ -40,7 +40,7 @@ migrate_working_dir/
 .flutter-plugins
 .flutter-plugins-dependencies
 .packages
-.pub-cache/ (*)
+.pub-cache/
 .pub/
 build/
 coverage/

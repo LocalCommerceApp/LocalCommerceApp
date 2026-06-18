@@ -60,3 +60,5 @@ export class Shop {
 
 export const ShopSchema = SchemaFactory.createForClass(Shop);
 ShopSchema.index({ location: '2dsphere' }); // Enable Geospatial Search
+ShopSchema.index({ owner: 1 }, { unique: true });
+ShopSchema.index({ status: 1, category: 1 });

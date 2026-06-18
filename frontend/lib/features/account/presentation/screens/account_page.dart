@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/design_system.dart';
-import '../../../auth/data/user_model.dart';
+import '../../../auth/domain/entities/user_entity.dart';
 import '../../../auth/presentation/auth_controller.dart';
 import '../../../orders/presentation/screens/orders_page.dart';
 import '../../../auth/presentation/screens/welcome_screen.dart';
@@ -10,7 +10,7 @@ import '../controllers/account_controller.dart';
 
 class AccountPage extends StatefulWidget {
   final String customerId;
-  final UserModel? user;
+  final UserEntity? user;
 
   const AccountPage({super.key, required this.customerId, this.user});
 

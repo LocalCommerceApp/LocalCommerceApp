@@ -1,25 +1,35 @@
 import 'package:flutter/material.dart';
-import '../domain/auth_repository.dart';
-import '../data/user_model.dart';
+import '../domain/entities/user_entity.dart';
+import '../domain/usecases/login_usecase.dart';
+import '../domain/usecases/register_usecase.dart';
+import '../domain/usecases/get_cached_user_usecase.dart';
 import '../../../core/cache/cache_manager.dart';
 
 class AuthController with ChangeNotifier {
-  final AuthRepository _repository;
+  final LoginUseCase _loginUseCase;
+  final RegisterUseCase _registerUseCase;
+  final GetCachedUserUseCase _getCachedUserUseCase;
 
-  AuthController(this._repository) {
+  AuthController({
+    required LoginUseCase loginUseCase,
+    required RegisterUseCase registerUseCase,
+    required GetCachedUserUseCase getCachedUserUseCase,
+  })  : _loginUseCase = loginUseCase,
+        _registerUseCase = registerUseCase,
+        _getCachedUserUseCase = getCachedUserUseCase {
     initSession();
   }
 
-  UserModel? _currentUser;
+  UserEntity? _currentUser;
   bool _isLoading = false;
   String? _error;
 
-  UserModel? get currentUser => _currentUser;
+  UserEntity? get currentUser => _currentUser;
   bool get isLoading => _isLoading;
   String? get error => _error;
 
   void initSession() {
-    _currentUser = _repository.getCachedUser();
+    _currentUser = _getCachedUserUseCase();
     notifyListeners();
   }
 
@@ -27,7 +37,7 @@ class AuthController with ChangeNotifier {
     _setLoading(true);
     _error = null;
     try {
-      _currentUser = await _repository.login(email, password, role);
+      _currentUser = await _loginUseCase(email, password, role);
       notifyListeners();
       return true;
     } catch (e) {
@@ -42,7 +52,7 @@ class AuthController with ChangeNotifier {
     _setLoading(true);
     _error = null;
     try {
-      _currentUser = await _repository.register(userData);
+      _currentUser = await _registerUseCase(userData);
       notifyListeners();
       return true;
     } catch (e) {

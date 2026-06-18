@@ -11,11 +11,11 @@ export class CartService {
     @InjectModel(Product.name) private productModel: Model<ProductDocument>,
   ) {}
 
-  async getCart(userId: string) {
-    let cart = await this.cartModel.findOne({ userId: new Types.ObjectId(userId) });
+  async getCart(userId: string, session?: any) {
+    let cart = await this.cartModel.findOne({ userId: new Types.ObjectId(userId) }).session(session);
     if (!cart) {
       cart = new this.cartModel({ userId: new Types.ObjectId(userId), items: [] });
-      await cart.save();
+      await cart.save({ session });
     }
     return cart;
   }
@@ -47,9 +47,9 @@ export class CartService {
     return cart.save();
   }
 
-  async clearCart(userId: string) {
-    const cart = await this.getCart(userId);
+  async clearCart(userId: string, session?: any) {
+    const cart = await this.getCart(userId, session);
     cart.items = [];
-    return cart.save();
+    return cart.save({ session });
   }
 }

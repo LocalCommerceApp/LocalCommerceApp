@@ -11,6 +11,8 @@ class Shop {
   final String verificationStatus;
   final String? gstCertificateUrl;
   final String? tradeLicenseUrl;
+  final String? verificationRejectedReason;
+  final String? verificationRejectedNotes;
 
   Shop({
     required this.id,
@@ -25,5 +27,7 @@ class Shop {
     this.verificationStatus = 'Unverified',
     this.gstCertificateUrl,
     this.tradeLicenseUrl,
+    this.verificationRejectedReason,
+    this.verificationRejectedNotes,
   });
 }

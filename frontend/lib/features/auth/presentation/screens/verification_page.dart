@@ -8,7 +8,15 @@ import '../../../../core/api/api_constants.dart';
 
 class VerificationPage extends StatefulWidget {
   final String? initialStatus;
-  const VerificationPage({super.key, this.initialStatus});
+  final String? rejectedReason;
+  final String? rejectedNotes;
+
+  const VerificationPage({
+    super.key,
+    this.initialStatus,
+    this.rejectedReason,
+    this.rejectedNotes,
+  });
 
   @override
   State<VerificationPage> createState() => _VerificationPageState();
@@ -305,6 +313,9 @@ class _VerificationPageState extends State<VerificationPage> {
   }
 
   Widget _buildRejectedBanner() {
+    final reason = widget.rejectedReason;
+    final notes = widget.rejectedNotes;
+    
     return Container(
       margin: const EdgeInsets.only(bottom: 24),
       padding: const EdgeInsets.all(16),
@@ -326,11 +337,24 @@ class _VerificationPageState extends State<VerificationPage> {
                   "Verification Rejected",
                   style: TextStyle(color: Colors.red.shade900, fontWeight: FontWeight.bold, fontSize: 15),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
                 Text(
-                  "Your previous documents were not accepted. Please upload valid, high-resolution photos or scans of your credentials and try again.",
-                  style: TextStyle(color: Colors.red.shade800, fontSize: 13, height: 1.4),
+                  "Reason: ${reason ?? 'Documents not accepted'}",
+                  style: const TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 13),
                 ),
+                if (notes != null && notes.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    "Details: $notes",
+                    style: TextStyle(color: Colors.red.shade800, fontSize: 13, height: 1.4),
+                  ),
+                ] else ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    "Your previous documents were not accepted. Please upload valid, high-resolution photos or scans of your credentials and try again.",
+                    style: TextStyle(color: Colors.red.shade800, fontSize: 12, height: 1.4),
+                  ),
+                ],
               ],
             ),
           ),

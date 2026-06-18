@@ -252,8 +252,9 @@ class _ShopkeeperDashState extends State<ShopkeeperDash> {
         'unread': true,
       });
     } else if (_myShop?.verificationStatus == 'Rejected') {
+      final reason = _myShop?.verificationRejectedReason;
       list.add({
-        'title': 'Shop verification was rejected. Please re-upload documents.',
+        'title': 'Shop verification rejected: ${reason ?? 'Please re-upload documents.'}',
         'time': 'Action needed',
         'unread': true,
       });
@@ -992,7 +993,13 @@ class _ShopkeeperDashState extends State<ShopkeeperDash> {
           onTap: () async {
             final result = await Navigator.push(
               context, 
-              MaterialPageRoute(builder: (context) => VerificationPage(initialStatus: _myShop?.verificationStatus))
+              MaterialPageRoute(
+                builder: (context) => VerificationPage(
+                  initialStatus: _myShop?.verificationStatus,
+                  rejectedReason: _myShop?.verificationRejectedReason,
+                  rejectedNotes: _myShop?.verificationRejectedNotes,
+                ),
+              ),
             );
             if (result == true) {
               _loadDashboardData();
@@ -1111,7 +1118,16 @@ class _ShopkeeperDashState extends State<ShopkeeperDash> {
               AppColors.error,
               actionLabel: "Re-verify Profile",
               onTap: () async {
-                final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => VerificationPage(initialStatus: _myShop?.verificationStatus)));
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VerificationPage(
+                      initialStatus: _myShop?.verificationStatus,
+                      rejectedReason: _myShop?.verificationRejectedReason,
+                      rejectedNotes: _myShop?.verificationRejectedNotes,
+                    ),
+                  ),
+                );
                 if (result == true) {
                   _loadDashboardData();
                 }
@@ -1125,7 +1141,16 @@ class _ShopkeeperDashState extends State<ShopkeeperDash> {
               AppColors.warning,
               actionLabel: "Verify Profile",
               onTap: () async {
-                final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => VerificationPage(initialStatus: _myShop?.verificationStatus)));
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VerificationPage(
+                      initialStatus: _myShop?.verificationStatus,
+                      rejectedReason: _myShop?.verificationRejectedReason,
+                      rejectedNotes: _myShop?.verificationRejectedNotes,
+                    ),
+                  ),
+                );
                 if (result == true) {
                   _loadDashboardData();
                 }

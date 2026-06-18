@@ -14,6 +14,8 @@ class ShopModel extends Shop {
     super.verificationStatus,
     super.gstCertificateUrl,
     super.tradeLicenseUrl,
+    super.verificationRejectedReason,
+    super.verificationRejectedNotes,
   });
 
   factory ShopModel.fromJson(Map<String, dynamic> json) {
@@ -30,6 +32,8 @@ class ShopModel extends Shop {
       verificationStatus: json['verificationStatus'] ?? 'Unverified',
       gstCertificateUrl: json['gstCertificateUrl'],
       tradeLicenseUrl: json['tradeLicenseUrl'],
+      verificationRejectedReason: json['verificationRejectedReason'],
+      verificationRejectedNotes: json['verificationRejectedNotes'],
     );
   }
 
@@ -46,5 +50,7 @@ class ShopModel extends Shop {
     'verificationStatus': verificationStatus,
     'gstCertificateUrl': gstCertificateUrl,
     'tradeLicenseUrl': tradeLicenseUrl,
+    'verificationRejectedReason': verificationRejectedReason,
+    'verificationRejectedNotes': verificationRejectedNotes,
   };
 }

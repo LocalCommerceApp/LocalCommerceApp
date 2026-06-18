@@ -620,6 +620,7 @@ window.confirmVerifyShop = function(id, name, targetStatus) {
   const title = document.getElementById('confirm-title');
   const message = document.getElementById('confirm-message');
   const icon = document.getElementById('confirm-icon');
+  const rejectContainer = document.getElementById('reject-reason-container');
   
   const isApprove = targetStatus === 'Verified';
   
@@ -630,6 +631,15 @@ window.confirmVerifyShop = function(id, name, targetStatus) {
   
   icon.setAttribute('data-lucide', isApprove ? 'check-circle' : 'alert-triangle');
   icon.style.color = isApprove ? 'var(--success)' : 'var(--danger)';
+  
+  if (isApprove) {
+    rejectContainer.classList.add('hidden');
+  } else {
+    rejectContainer.classList.remove('hidden');
+    // Reset inputs
+    document.getElementById('reject-reason-select').selectedIndex = 0;
+    document.getElementById('reject-notes-input').value = '';
+  }
   
   modal.classList.remove('hidden');
   initIcons();
@@ -646,7 +656,15 @@ window.confirmVerifyShop = function(id, name, targetStatus) {
   const onConfirm = async () => {
     modal.classList.add('hidden');
     removeListeners();
-    await updateShopStatus(id, targetStatus);
+    
+    let reason = undefined;
+    let notes = undefined;
+    if (!isApprove) {
+      reason = document.getElementById('reject-reason-select').value;
+      notes = document.getElementById('reject-notes-input').value.trim();
+    }
+    
+    await updateShopStatus(id, targetStatus, reason, notes);
   };
   
   function removeListeners() {
@@ -659,15 +677,21 @@ window.confirmVerifyShop = function(id, name, targetStatus) {
 };
 
 // API Call to Update Shop Status
-async function updateShopStatus(id, status) {
+async function updateShopStatus(id, status, reason, notes) {
   try {
+    const payload = { status };
+    if (status === 'Rejected') {
+      payload.reason = reason;
+      payload.notes = notes;
+    }
+
     const response = await fetch(`${API_BASE_URL}/shops/admin/${id}/verify`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ status })
+      body: JSON.stringify(payload)
     });
     
     const data = await response.json();

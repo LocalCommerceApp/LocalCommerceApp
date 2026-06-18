@@ -117,12 +117,12 @@ export class ShopsController {
   @ApiOperation({ summary: 'Verify or reject a shop verification request (Admin only)' })
   async verifyShopAdmin(
     @Param('id') id: string,
-    @Body() body: { status: string },
+    @Body() body: { status: string; reason?: string; notes?: string },
   ) {
     if (!['Verified', 'Rejected', 'Pending', 'Unverified'].includes(body.status)) {
       throw new BadRequestException('Invalid verification status');
     }
-    return this.shopsService.updateVerificationStatus(id, body.status);
+    return this.shopsService.updateVerificationStatus(id, body.status, body.reason, body.notes);
   }
 
   @Put('my/status')

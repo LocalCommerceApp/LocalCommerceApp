@@ -351,6 +351,29 @@
         <h3 id="confirm-title">Confirm Action</h3>
       </div>
       <p id="confirm-message">Are you sure you want to proceed?</p>
+      
+      <!-- Rejection Reasons Form -->
+      <div id="reject-reason-container" class="hidden" style="width: 100%; margin-top: 16px; display: flex; flex-direction: column; gap: 12px; text-align: left;">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label for="reject-reason-select" style="font-size: 11px; margin-bottom: 6px;">Rejection Reason</label>
+          <div class="input-wrapper">
+            <select id="reject-reason-select" style="width: 100%; padding: 10px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-primary); font-size: 13px; outline: none; border-color: var(--border-hover);">
+              <option value="GST Certificate Expired">GST Certificate Expired</option>
+              <option value="Document Details Mismatch (Name/Address)">Document Details Mismatch (Name/Address)</option>
+              <option value="Blurry or Illegible Upload">Blurry or Illegible Upload</option>
+              <option value="Invalid Document Type">Invalid Document Type</option>
+              <option value="Other / Verification Failed">Other / Verification Failed</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label for="reject-notes-input" style="font-size: 11px; margin-bottom: 6px;">Detailed Notes (Shown to Merchant)</label>
+          <div class="input-wrapper">
+            <textarea id="reject-notes-input" placeholder="Explain what the merchant needs to correct..." style="width: 100%; height: 80px; padding: 10px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-primary); font-size: 13px; resize: none; outline: none; border-color: var(--border-hover);"></textarea>
+          </div>
+        </div>
+      </div>
+
       <div class="confirm-actions">
         <button id="confirm-cancel-btn" class="secondary-btn">Cancel</button>
         <button id="confirm-ok-btn" class="primary-btn">Confirm</button>

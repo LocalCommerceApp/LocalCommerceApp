@@ -52,10 +52,17 @@ export class ShopsService {
     return this.shopModel.find().populate('owner', 'name email').exec();
   }
 
-  async updateVerificationStatus(id: string, status: string) {
+  async updateVerificationStatus(id: string, status: string, reason?: string, notes?: string) {
     const shop = await this.shopModel.findById(id).exec();
     if (!shop) throw new NotFoundException('Shop not found');
     shop.verificationStatus = status;
+    if (status === 'Rejected') {
+      shop.verificationRejectedReason = reason;
+      shop.verificationRejectedNotes = notes;
+    } else {
+      shop.verificationRejectedReason = undefined;
+      shop.verificationRejectedNotes = undefined;
+    }
     return shop.save();
   }
 

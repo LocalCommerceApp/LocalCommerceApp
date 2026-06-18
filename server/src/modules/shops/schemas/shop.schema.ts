@@ -56,6 +56,12 @@ export class Shop {
 
   @Prop()
   tradeLicenseUrl?: string;
+
+  @Prop()
+  verificationRejectedReason?: string;
+
+  @Prop()
+  verificationRejectedNotes?: string;
 }
 
 export const ShopSchema = SchemaFactory.createForClass(Shop);

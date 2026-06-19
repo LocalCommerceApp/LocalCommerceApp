@@ -1793,7 +1793,7 @@ tr:hover td {
 /* ─── SPLIT WORKSPACE STYLES ──────────────────────────────────────────────── */
 .split-workspace {
   display: grid;
-  grid-template-columns: 340px 1.1fr 1.3fr;
+  grid-template-columns: 360px 1.1fr 1.3fr;
   gap: 16px;
   height: calc(100vh - 190px);
   min-height: 520px;
@@ -1807,6 +1807,34 @@ tr:hover td {
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+}
+
+/* Custom layout to make filters wrap nicely on a second row in the sidebar */
+.queue-panel-card .table-header {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  padding: 16px 12px;
+}
+
+.queue-panel-card .filters {
+  width: 100%;
+  display: flex;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  padding: 2px;
+  border-radius: var(--radius-md);
+  gap: 2px;
+}
+
+.queue-panel-card .filter-btn {
+  flex: 1;
+  text-align: center;
+  padding: 6px 2px;
+  font-size: 10.5px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
 }
 
 .queue-list-container {

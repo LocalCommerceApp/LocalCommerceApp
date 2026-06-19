@@ -6,6 +6,7 @@ import '../auth_controller.dart';
 import '../widgets/auth_text_field.dart';
 import '../../../shop/presentation/screens/customer_home.dart';
 import '../../../shopkeeper/presentation/screens/shopkeeper_dash.dart';
+import '../../../shopkeeper/presentation/screens/shopkeeper_route_handler.dart';
 import '../../../distributor/presentation/screens/distributor_dash.dart';
 import 'register_screen.dart';
 
@@ -41,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else if (selectedRole == 'Shopkeeper') {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const ShopkeeperDash()),
+          MaterialPageRoute(builder: (context) => const ShopkeeperRouteHandler()),
         );
       } else {
         Navigator.pushReplacement(

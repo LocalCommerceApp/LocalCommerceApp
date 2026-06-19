@@ -514,12 +514,31 @@ class _CompleteVerificationScreenState extends State<CompleteVerificationScreen>
                   TextFormField(
                     controller: _gstNumberController,
                     textCapitalization: TextCapitalization.characters,
-                    decoration: const InputDecoration(labelText: "GST Number", hintText: "19AAAAA0000A1Z5"),
+                    decoration: const InputDecoration(
+                      labelText: "GST Number (GSTIN)",
+                      hintText: "19AAAAA0000A1Z5",
+                      helperText: "Format: 2 digits + 5 letters + 4 digits + 1 letter + 1 alphanumeric + Z + 1 alphanumeric",
+                      helperMaxLines: 2,
+                    ),
                     validator: (v) {
                       if (v == null || v.trim().isEmpty) return "GST Number is required";
                       final clean = v.trim().toUpperCase();
-                      if (clean.length != 15) return "GST must be exactly 15 characters";
+                      if (clean.length != 15) return "GSTIN must be exactly 15 characters";
+                      final gstinRegex = RegExp(r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$');
+                      if (!gstinRegex.hasMatch(clean)) {
+                        return "Invalid GSTIN format (e.g. 19AAAAA0000A1Z5)";
+                      }
                       return null;
+                    },
+                    onChanged: (v) {
+                      // Auto-uppercase as user types
+                      final upper = v.toUpperCase();
+                      if (v != upper) {
+                        _gstNumberController.value = _gstNumberController.value.copyWith(
+                          text: upper,
+                          selection: TextSelection.collapsed(offset: upper.length),
+                        );
+                      }
                     },
                   ),
                   const SizedBox(height: AppSpacing.md),

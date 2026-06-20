@@ -21,4 +21,4 @@ COPY --from=build /usr/src/app/dist ./dist
 
 EXPOSE 5001
 
-CMD ["node", "dist/src/main"]
+CMD ["node", "dist/main"]
